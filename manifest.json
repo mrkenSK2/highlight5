@@ -12,17 +12,13 @@
             "js": ["main.js"]
         }
     ],
-    "permissions": ["alarms"],
-    "action": {
-      "default_popup": "search.html"
-    },
     "commands": {
-        "_execute_action": {
+        "action1": {
             "suggested_key": {
                 "default": "Ctrl+Shift+H",
                 "mac": "MacCtrl+H"
             },
             "description": "Run extension."
         }
-    }
+      }
 }
