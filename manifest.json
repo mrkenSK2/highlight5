@@ -1,0 +1,28 @@
+{
+    "name": "scroll",
+    "description": "detect scroll",
+    "version": "1.0",
+    "manifest_version": 3,
+    "content_scripts": [
+        {
+            "matches": [
+                "https://*/*",
+                "http://*/*"
+            ],
+            "js": ["main.js"]
+        }
+    ],
+    "permissions": ["alarms"],
+    "action": {
+      "default_popup": "search.html"
+    },
+    "commands": {
+        "_execute_action": {
+            "suggested_key": {
+                "default": "Ctrl+Shift+H",
+                "mac": "MacCtrl+H"
+            },
+            "description": "Run extension."
+        }
+    }
+}
