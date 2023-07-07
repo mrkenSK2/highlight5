@@ -3,13 +3,17 @@
     "description": "detect scroll",
     "version": "1.0",
     "manifest_version": 3,
+    "action": {
+        "default_popup": "popup.html"
+    },
+    "permissions": ["tabs"],
     "content_scripts": [
         {
             "matches": [
                 "https://*/*",
                 "http://*/*"
             ],
-            "js": ["main.js"]
+            "js": ["content.js"]
         }
     ],
     "commands": {
