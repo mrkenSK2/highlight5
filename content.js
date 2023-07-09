@@ -14,7 +14,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         return true;
     }
     staticRecursiveReplace(request.val, request.id);
-    sendResponse('accepted'); // 送信側に送り返したい情報を記入する
+    sendResponse('accepted');
     return true;
 });
 
@@ -33,13 +33,13 @@ function reset(node, id) {
     if (node.id === markId[id]) {
         if (node.parentNode === null) return;
         const replaced = node.parentNode.innerHTML.replace(reg, last[id]);
-        console.log(replaced);
+        //console.log(replaced);
         node.parentNode.innerHTML = replaced;
     }
 }
 
 function staticRecursiveReplace(highlight, id) {
-    substr = highlight.replace(/[\\\/\*\+\.?\^${}\[\]()|\-]/g, '\\$&');
+    let substr = highlight.replace(/[\\\/\*\+\.?\^${}\[\]()|\-]/g, '\\$&');
     let reg = new RegExp(substr, 'g');
 
     const childNodes = document.querySelectorAll('html body :not(script)');
@@ -59,8 +59,23 @@ function staticRecursiveReplace(highlight, id) {
         if (checkLeafNodes(childNodes[i])) {
             if (markId.indexOf(childNodes[i].id) !== -1) {
                 if (childNodes[i].parentNode !== null) {
-                    const replaced = childNodes[i].parentNode.innerHTML.replace(reg, `<span id="${markId[id]}" style="background-color: ${color[id]};">` + highlight + '</span>');
-                    childNodes[i].parentNode.innerHTML = replaced;
+                    let org = childNodes[i].parentNode.innerHTML;
+                    // console.log(childNodes[i].parentNode.innerHTML);
+                    let preoffset = 0, postoffset = 0;
+                    let textArr = [];
+                    let target, rest = org;
+                    while (preoffset = rest.indexOf('<') !== -1) {
+                        target = rest.substring(0, preoffset); // > hoge < のhoge, ><は含まない（最後に配列を合体するから）
+                        rest = rest.substr(preoffset); // < 以降, <は含む
+                        textArr.push(target.replace(reg, `<span id="${markId[id]}" style="background-color: ${color[id]};">` + highlight + '</span>'));
+                        //< > を飛ばす・<>は含む
+                        postoffset = rest.indexOf('>');
+                        textArr.push(rest.substring(0, postoffset + 1));
+                        rest = rest.substr(postoffset + 1);
+                    }
+                    // 最後のタグ以降
+                    textArr.push(rest.replace(reg, `<span id="${markId[id]}" style="background-color: ${color[id]};">` + highlight + '</span>'));
+                    childNodes[i].parentNode.innerHTML = textArr.join('');
                 }
             } else {
                 const replaced = childNodes[i].innerHTML.replace(reg, `<span id="${markId[id]}" style="background-color: ${color[id]};">` + highlight + '</span>');
