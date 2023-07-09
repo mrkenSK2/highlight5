@@ -45,6 +45,34 @@ function staticRecursiveReplace(highlight, id) {
     const childNodes = document.querySelectorAll('html body :not(script)');
     let len = childNodes.length;
 
+    if (highlight === "") {
+        alert('空白を検索しないでください');
+        return;
+    }
+
+    if (highlight.indexOf('>') !== -1 || highlight.indexOf('<') !== -1) {
+        alert('検索に不等号を含めないでください');
+        return;
+    }
+
+    let flag = false;
+    for (let i = 0; i < highlight.length; i++) {
+        for (let j = 0; j < 5; j++) {
+            if (j !== id) {
+                if (last[j] !== null) {
+                    if (last[j].indexOf(highlight[i]) !== -1) {
+                        flag = true;
+                        break;
+                    }
+                }
+            }
+        }
+        if (flag) {
+            alert('複数のテキストボックスに同じ文字を含めないでください');
+            return;
+        }
+    }
+
     if (last[id] != null) {
         for (let i = 0; i < len; i++) {
             if (checkLeafNodes(childNodes[i])) {
