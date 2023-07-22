@@ -1,6 +1,6 @@
 {
-    "name": "scroll",
-    "description": "detect scroll",
+    "name": "highlight5",
+    "description": "highlight words",
     "version": "1.0",
     "manifest_version": 3,
     "action": {
